@@ -1,20 +1,9 @@
 <template>
   <main class="login-container">
     <div class="login-content">
-      <!-- Disclaimer Message -->
-      <div class="disclaimer">
-        <p>
-          This system is intended for business use only. All data herein is
-          considered confidential and proprietary. Unauthorized access, use,
-          modification, destruction, or disclosure of information supported by
-          this system will result in prosecution.
-        </p>
-        <button class="disclaimer-button" @click="acceptDisclaimer">OK</button>
-      </div>
-
       <!-- Login Form -->
       <h1>Log In</h1>
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="showDisclaimer">
         <div class="form-group">
           <label for="email">Email</label>
           <input
@@ -35,10 +24,24 @@
             required
           />
         </div>
-        <button type="submit" class="login-button">Log In</button>
+        <button type="submit" class="btn btn-primary">Log In</button>
       </form>
       <p class="help-text">If you need assistance, please contact support.</p>
     </div>
+
+    <!-- Disclaimer Modal -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <p>
+          This system is intended for business use only. All data herein is
+          considered confidential and proprietary. Unauthorized access, use,
+          modification, destruction, or disclosure of information supported by
+          this system will result in prosecution.
+        </p>
+        <button class="btn btn-primary" @click="handleLogin">OK</button>
+      </div>
+    </div>
+
     <footer class="login-footer">
       <p>Phone Support: 877-399-6538</p>
       <p>Monday-Friday 7:00 AM - 7:00 PM Central Time</p>
@@ -56,33 +59,35 @@ export default {
   name: "LoginView",
   setup() {
     const router = useRouter();
-    const toast = useToast(); // Initialize toast
+    const toast = useToast();
     const email = ref("");
     const password = ref("");
+    const showModal = ref(false);
 
-    const handleLogin = () => {
-      // Mock login logic (replace with API call)
+    const showDisclaimer = () => {
       if (email.value && password.value) {
-        // Simulate a 200 success response
-        setTimeout(() => {
-          localStorage.setItem("isAuthenticated", "true");
-          toast.success("Login successful. Redirecting to dashboard..."); // Show success toast
-          router.push({ name: "Dashboard" }); // Redirect to dashboard
-        }, 1000); // Simulate a 1-second delay for API call
+        showModal.value = true; // Show the disclaimer modal
       } else {
-        toast.error("Please enter valid credentials."); // Show error toast
+        toast.error("Please enter valid credentials.");
       }
     };
 
-    const acceptDisclaimer = () => {
-      toast.info("Disclaimer accepted. Proceed to login."); // Show disclaimer toast
+    const handleLogin = () => {
+      showModal.value = false; // Hide the modal
+      // Simulate a login request
+      setTimeout(() => {
+        localStorage.setItem("isAuthenticated", "true");
+        toast.success("Login successful. Redirecting to dashboard...");
+        router.push({ name: "Dashboard" });
+      }, 1000);
     };
 
     return {
       email,
       password,
+      showModal,
+      showDisclaimer,
       handleLogin,
-      acceptDisclaimer,
     };
   },
 };
@@ -95,106 +100,84 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f5f5f5;
-  padding: 2rem;
+  padding: var(--spacing-xl);
   box-sizing: border-box;
 }
 
 .login-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 8px;
+  background-color: var(--white);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
   text-align: center;
-}
-
-.disclaimer {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.disclaimer p {
-  color: #2c3e50;
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-}
-
-.disclaimer-button {
-  padding: 0.5rem 1rem;
-  background-color: #42b983;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.disclaimer-button:hover {
-  background-color: #3aa876;
-}
-
-h1 {
-  color: #2c3e50;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin: 0 auto;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-lg);
   text-align: left;
 }
 
-label {
+.form-group label {
   display: block;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-color);
   font-weight: 500;
 }
 
-input {
+.form-group input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.login-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #42b983;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.login-button:hover {
-  background-color: #3aa876;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
 }
 
 .help-text {
-  margin-top: 1rem;
-  color: #2c3e50;
-  font-size: 0.875rem;
+  margin-top: var(--spacing-md);
+  color: var(--text-color);
+  font-size: var(--font-size-base);
 }
 
 .login-footer {
-  margin-top: 2rem;
+  margin-top: var(--spacing-xl);
   text-align: center;
-  color: #666;
-  font-size: 0.875rem;
+  color: var(--text-color);
+  font-size: var(--font-size-base);
 }
 
 .login-footer p {
-  margin: 0.25rem 0;
+  margin: var(--spacing-sm) 0;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--white);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.modal-content p {
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-color);
+  font-size: var(--font-size-base);
 }
 </style>
