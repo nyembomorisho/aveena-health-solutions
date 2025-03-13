@@ -1,0 +1,29 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+  }
+  
+  /* Flexbox Utilities */
+  .flex {
+    display: flex;
+  }
+  
+  .justify-between {
+    justify-content: space-between;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  /* Responsive Utilities */
+  @media (max-width: 768px) {
+    .flex-column {
+      flex-direction: column;
+    }
+  }
+  
