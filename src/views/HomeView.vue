@@ -1,13 +1,15 @@
 <template>
-  <main class="home-container">
-    <div class="home-content">
-      <h1>Welcome to Aveena Health Solutions</h1>
-      <p>Your trusted healthcare platform.</p>
-      <button class="btn btn-primary" @click="navigateToLogin">
-        Get Started
-      </button>
-    </div>
-  </main>
+  <div class="container">
+    <main class="home-container">
+      <div class="home-content">
+        <h1>Welcome to Aveena Health Solutions</h1>
+        <p>Your trusted healthcare platform.</p>
+        <button class="btn btn-primary" @click="navigateToLogin">
+          Get Started
+        </button>
+      </div>
+    </main>
+  </div>
 </template>
 
 <script>
